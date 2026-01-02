@@ -1,0 +1,36 @@
+//
+//  SearchResultsView.swift
+//  TravelBook
+//
+//  Created by ddorsat on 05.01.2026.
+//
+
+import SwiftUI
+
+struct SearchResultsView: View {
+    let cell: CellModel
+    let onTapHandler: (CellModel) -> Void
+    
+    var body: some View {
+        ZStack {
+            Components.backgroundColor(onlyBottom: true)
+            
+            ScrollView {
+                CellFeedView(cell: .mock) { cell in
+                    onTapHandler(cell)
+                }
+            }
+        }
+        .navigationTitle("Поиск")
+        .navigationBarTitleDisplayMode(.inline)
+        .bottomAreaPadding()
+    }
+}
+
+#Preview {
+    NavigationStack {
+        SearchResultsView(cell: .mock) { _ in
+            
+        }
+    }
+}
