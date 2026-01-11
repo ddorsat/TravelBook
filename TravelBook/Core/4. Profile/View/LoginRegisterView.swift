@@ -7,10 +7,8 @@
 
 import SwiftUI
 
-struct SignInUpView: View {
-    let appleButton: () -> Void
-    let signInButton: () -> Void
-    let signUpButton: () -> Void
+struct LoginRegisterView: View {
+    @ObservedObject var vm: ProfileViewModel
     
     var body: some View {
         VStack(spacing: 30) {
@@ -22,12 +20,12 @@ struct SignInUpView: View {
                 .padding(.bottom, 25)
                 
             VStack(spacing: 18) {
-                SignInUpButtonView(type: .apple) {
-                    appleButton()
+                LoginRegisterButtonView(type: .apple) {
+                    // APPLE REGISTER
                 }
                 
-                SignInUpButtonView(type: .mail) {
-                    signInButton()
+                LoginRegisterButtonView(type: .mail) {
+                    vm.profileRoutes.append(.login)
                 }
                 
                 HStack {
@@ -35,7 +33,7 @@ struct SignInUpView: View {
                         .foregroundStyle(.gray)
                     
                     Button {
-                        signUpButton()
+                        vm.profileRoutes.append(.register)
                     } label: {
                         Text("Регистрация")
                             .fontWeight(.medium)
@@ -51,12 +49,6 @@ struct SignInUpView: View {
 
 #Preview {
     NavigationStack {
-        SignInUpView() {
-            
-        } signInButton: {
-            
-        } signUpButton: {
-            
-        }
+        LoginRegisterView(vm: ProfileViewModel(authService: AuthService()))
     }
 }

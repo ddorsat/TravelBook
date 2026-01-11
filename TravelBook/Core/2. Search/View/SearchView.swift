@@ -8,9 +8,19 @@
 import SwiftUI
 
 struct SearchView: View {
-    @StateObject private var vm = SearchViewModel()
-    @State private var searchText = ""
+    @StateObject private var vm: SearchViewModel
     @State private var isShown = false
+    
+    let contentService: any ContentServiceProtocol
+    let favoritesService: any FavoritesServiceProtocol
+    
+    init(contentService: any ContentServiceProtocol,
+         favoritesService: any FavoritesServiceProtocol) {
+        self.contentService = contentService
+        self.favoritesService = favoritesService
+        
+        _vm = StateObject(wrappedValue: SearchViewModel(contentService: contentService))
+    }
 
     var body: some View {
         NavigationStack(path: $vm.searchRoutes) {
@@ -34,8 +44,8 @@ struct SearchView: View {
 
                             ForEach(CategoryModel.mockArray.prefix(upTo: 3),
                                     id: \.self) { category in
-                                TrendingCellView(category: category) {
-                                    vm.searchRoutes.append(.cellCategories(category))
+                                CategoriesSmallView(category: category) {
+                                    vm.searchRoutes.append(.categoryCells(category))
                                 }
                             }
                         }
@@ -51,16 +61,11 @@ struct SearchView: View {
                         .padding(.top, 3)
                         .whiteBackground()
 
-                        CellFeedView(cell: .mock) { cell in
-                            vm.searchRoutes.append(.cellDetails(cell))
-                        }
-                        .padding(.top, -30)
-                        
                         VStack(alignment: .leading, spacing: 20) {
-                            ForEach(CellModel.mockArray, id: \.self) { cell in
+                            ForEach(vm.cells, id: \.self) { cell in
                                 VStack(alignment: .leading, spacing: 10) {
                                     CellInfoView(cell: cell) { cell in
-                                        vm.searchRoutes.append(.cellDetails(cell))
+                                        vm.searchRoutes.append(.searchFeedCellDetails(cell))
                                     }
                                 }
                                 .whiteBackground()
@@ -73,9 +78,12 @@ struct SearchView: View {
                 .navigationBarTitleDisplayMode(.inline)
                 .bottomAreaPadding()
                 .scrollIndicators(.hidden)
-                .searchable(text: $searchText,
+                .searchable(text: $vm.searchText,
                             placement: .navigationBarDrawer(displayMode: .automatic),
                             prompt: "Поиск")
+                .onSubmit(of: .search) {
+                    Task { await vm.searchData() }
+                }
                 .navigationDestination(for: SearchRoutes.self,
                                        destination: destinationView)
             }
@@ -87,24 +95,30 @@ extension SearchView {
     @ViewBuilder
     private func destinationView(_ destination: SearchRoutes) -> some View {
         switch destination {
+            case .searchFeedCellDetails(let cell):
+                CellDetailsView(cell: cell, favoritesService: favoritesService)
+            case .searchResults:
+                SearchResultsView(vm: vm) { cell in
+                    vm.searchRoutes.append(.searchResultsCellDetails(cell))
+                }
+            case .searchResultsCellDetails(let cell):
+                CellDetailsView(cell: cell, favoritesService: favoritesService)
             case .categories:
-                CategoriesView() { category in
-                    vm.searchRoutes.append(.cellCategories(category))
+                CategoriesView(categories: vm.categories) { category in
+                    vm.searchRoutes.append(.categoryCells(category))
                 }
-            case .cellCategories(let category):
-                CellCategoriesView(category: category) { cell in
-                    vm.searchRoutes.append(.cellCategoriesDetails(cell))
+            case .categoryCells(let category):
+                CategoryCellsView(vm: vm, category: category) { cell in
+                    vm.searchRoutes.append(.categoryCellDetails(cell))
                 }
-            case .cellCategoriesDetails(let cell):
-                CellDetailsView(cell: cell)
-            case .cellDetails(let cell):
-                CellDetailsView(cell: cell)
+            case .categoryCellDetails(let cell):
+                CellDetailsView(cell: cell, favoritesService: favoritesService)
         }
     }
 }
 
 #Preview {
     NavigationStack {
-        SearchView()
+        SearchView(contentService: ContentService(), favoritesService: FavoritesService())
     }
 }

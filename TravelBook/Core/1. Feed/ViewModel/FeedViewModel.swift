@@ -9,30 +9,53 @@ import Foundation
 import SwiftUI
 import Combine
 
+enum FeedRoutes: Hashable {
+    case headCell(CellModel)
+    case popular
+    case bigCell(CellModel)
+    case feedCell(CellModel)
+    case cellDetails(CellModel)
+}
+
 final class FeedViewModel: ObservableObject {
     @Published var feedRoutes: [FeedRoutes] = []
     @Published var cells: [CellModel] = []
     
-    func fetchData() async {
-        guard let url = URL(string: "http://127.0.0.1:8080/feed") else { return }
+    let contentService: any ContentServiceProtocol
+    let favoritesService: any FavoritesServiceProtocol
+    
+    var popularCells: [CellModel] {
+        return cells.filter { $0.isPopular }
+    }
+    
+    var headCell: CellModel? {
+        return cells.first(where: { $0.isHeadCell }) ?? cells.first
+    }
+    
+    private var cancellables = Set<AnyCancellable>()
+    
+    init(contentService: any ContentServiceProtocol,
+         favoritesService: any FavoritesServiceProtocol) {
+        self.contentService = contentService
+        self.favoritesService = favoritesService
         
-        do {
-            let (data, _) = try await URLSession.shared.data(from: url)
-            
-            let decoder = JSONDecoder()
-            decoder.dateDecodingStrategy = .iso8601
-            
-            let loadedCells = try decoder.decode([CellModel].self, from: data)
-            
-            withAnimation {
-                self.cells = loadedCells
-            }
-        } catch {
-            print("Ошибка загрузки - \(error.localizedDescription)")
+        setupSubscriptions()
+        
+        Task {
+            await contentService.fetchData()
+            await favoritesService.fetchFavorites()
         }
+    }
+    
+    deinit {
+        cancellables.removeAll()
+    }
+    
+    private func setupSubscriptions() {
+        contentService.allCells
+            .receive(on: RunLoop.main)
+            .assign(to: \.cells, on: self)
+            .store(in: &cancellables)
     }
 }
 
-enum FeedRoutes: Hashable {
-    case headCell, popular(CellModel), bigCell(CellModel), feedCell(CellModel), cellDetails(CellModel)
-}

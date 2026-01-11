@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct PopularView: View {
-    let cell: CellModel
+    let cells: [CellModel]
     let onTapHandler: (CellModel) -> Void
     
     var body: some View {
@@ -16,7 +16,7 @@ struct PopularView: View {
             Components.backgroundColor(onlyBottom: true)
             
             ScrollView {
-                CellFeedView(cell: cell) { cell in
+                CellFeedView(cell: cells) { cell in
                     onTapHandler(cell)
                 }
             }
@@ -28,7 +28,7 @@ struct PopularView: View {
 }
 
 #Preview {
-    PopularView(cell: .mock) { _ in
+    PopularView(cells: [CellModel.mock, CellModel.mock]) { _ in
         
     }
 }

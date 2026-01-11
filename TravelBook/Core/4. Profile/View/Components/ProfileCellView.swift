@@ -41,13 +41,14 @@ struct ProfileCellView: View {
                 }
                 
                 if type == .signedIn {
-                    VStack(alignment: .leading, spacing: 5) {
-                        Text(user.username)
+                    VStack(alignment: .leading, spacing: 8) {
+                        Text(user.username ?? user.email)
                             .foregroundStyle(.black)
                             .fontWeight(.semibold)
-                        Text("@id\(user.id)")
+                            .font(.system(size: 18))
+                        Text("@" + user.id.uuidString.suffix(5))
                             .foregroundStyle(Color(uiColor: .gray))
-                            .font(.system(size: 15))
+                            .font(.system(size: 13))
                     }
                 } else {
                     Text(type.rawValue)

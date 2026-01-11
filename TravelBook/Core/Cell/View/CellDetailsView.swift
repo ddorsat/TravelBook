@@ -8,7 +8,13 @@
 import SwiftUI
 
 struct CellDetailsView: View {
+    @StateObject private var vm: CellDetailsViewModel
     let cell: CellModel
+    
+    init(cell: CellModel, favoritesService: any FavoritesServiceProtocol) {
+        self.cell = cell
+        _vm = StateObject(wrappedValue: CellDetailsViewModel(cell: cell, favoritesService: favoritesService))
+    }
     
     var body: some View {
         ScrollView {
@@ -21,7 +27,12 @@ struct CellDetailsView: View {
                     .clipShape(RoundedRectangle(cornerRadius: 20))
                     .horizontalPadding(false)
                 
-                CellBuilderView(cell: cell, isSearch: false, isCellDetails: true)
+                CellBuilderView(cell: cell,
+                                isSearch: false,
+                                isCellDetails: true,
+                                isFavorite: $vm.isFavorite) {
+                    vm.toggleFavorite()
+                }
                 
                 TabView {
                     ForEach(cell.images, id: \.self) { image in
@@ -42,7 +53,6 @@ struct CellDetailsView: View {
         }
     }
 }
-
 #Preview {
-    CellDetailsView(cell: .mock)
+    CellDetailsView(cell: .mock, favoritesService: FavoritesService())
 }

@@ -12,6 +12,10 @@ struct CellBuilderView: View {
     let isSearch: Bool
     let isCellDetails: Bool
     
+    @Binding var isFavorite: Bool?
+    
+    var onFavoriteTapHandler: (() -> Void)? = nil
+    
     var body: some View {
         VStack(alignment: .leading, spacing: isSearch ? 13 : 15) {
             if isSearch {
@@ -30,16 +34,21 @@ struct CellBuilderView: View {
             HStack(spacing: isCellDetails ? 15 : 10) {
                 Text("\(cell.dateString)")
                 Divider()
+                
                 Text("\(cell.readingTime) мин")
                 Divider()
                 
                 if isCellDetails {
                     Button {
+                        withAnimation {
+                            isFavorite?.toggle()
+                        }
                         
+                        onFavoriteTapHandler?()
                     } label: {
-                        Image(systemName: "heart")
+                        Image(systemName: isFavorite ?? false ? "heart.fill" : "heart")
                             .imageScale(.large)
-                            .foregroundStyle(.red)
+                            .foregroundStyle(isFavorite ?? false ? .red : .gray)
                     }
                 }
             }
@@ -59,17 +68,6 @@ struct CellBuilderView: View {
     }
 }
 
-/*
- Button {
-     
- } label: {
-     Image(systemName: "heart")
-         .foregroundStyle(.red)
-         .font(.system(size: 23))
-         .padding(.trailing, 10)
- }
- */
-
 #Preview {
-    CellBuilderView(cell: .mock, isSearch: true, isCellDetails: true)
+    CellBuilderView(cell: .mock, isSearch: true, isCellDetails: true, isFavorite: .constant(true))
 }

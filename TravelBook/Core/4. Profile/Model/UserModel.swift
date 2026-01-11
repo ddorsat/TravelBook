@@ -7,12 +7,18 @@
 
 import Foundation
 
-struct UserModel: Identifiable {
-    let id: Int
-    let username: String
+struct UserModel: Identifiable, Codable {
+    let id: UUID
+    let username: String?
     let email: String
+    
+    init(id: UUID, username: String? = nil, email: String) {
+        self.id = id
+        self.username = username
+        self.email = email
+    }
 }
 
 extension UserModel {
-    static let mock = UserModel(id: 1, username: "Dmitry", email: "test@test.com")
+    static let mock = UserModel(id: UUID(), username: "Dmitry", email: "test@test.com")
 }

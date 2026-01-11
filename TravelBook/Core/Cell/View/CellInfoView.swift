@@ -16,7 +16,10 @@ struct CellInfoView: View {
             onTapHandler(cell)
         } label: {
             VStack(alignment: .leading) {
-                CellBuilderView(cell: cell, isSearch: true, isCellDetails: false)
+                CellBuilderView(cell: cell,
+                                isSearch: true,
+                                isCellDetails: false,
+                                isFavorite: .constant(nil))
                     
                 Text("Читать далее")
                     .foregroundStyle(.blue)

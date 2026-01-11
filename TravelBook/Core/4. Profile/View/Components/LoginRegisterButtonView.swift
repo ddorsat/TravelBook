@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct SignInUpButtonView: View {
+struct LoginRegisterButtonView: View {
     let type: SignInButtons
     let onTapHandler: () -> Void
     
@@ -50,11 +50,11 @@ enum SignInButtons: String {
 }
 
 #Preview {
-    SignInUpButtonView(type: .apple) {
+    LoginRegisterButtonView(type: .apple) {
         
     }
     
-    SignInUpButtonView(type: .mail) {
+    LoginRegisterButtonView(type: .mail) {
         
     }
 }

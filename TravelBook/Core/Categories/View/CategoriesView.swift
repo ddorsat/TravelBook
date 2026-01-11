@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct CategoriesView: View {
+    let categories: [CategoryModel]
     let gridSetup = [GridItem(.flexible(), spacing: 15, alignment: .top),
                      GridItem(.flexible(), spacing: 15, alignment: .top)]
     let onTapHandler: (CategoryModel) -> Void
@@ -15,8 +16,8 @@ struct CategoriesView: View {
     var body: some View {
         ScrollView {
             LazyVGrid(columns: gridSetup, alignment: .leading, spacing: 15) {
-                ForEach(CategoryModel.mockArray, id: \.self) { category in
-                    CategoriesCellView(category: category) {
+                ForEach(categories, id: \.self) { category in
+                    CategoryCellView(category: category) {
                         onTapHandler(category)
                     }
                 }
@@ -29,7 +30,7 @@ struct CategoriesView: View {
 }
 
 #Preview {
-    CategoriesView() { _ in
+    CategoriesView(categories: CategoryModel.mockArray) { _ in
         
     }
 }

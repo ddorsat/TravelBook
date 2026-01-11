@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct CategoriesCellView: View {
+struct CategoryCellView: View {
     let category: CategoryModel
     let onTapHandler: () -> Void
     
@@ -22,7 +22,7 @@ struct CategoriesCellView: View {
                     .clipped()
                 
                 VStack(alignment: .leading, spacing: 10) {
-                    Text(category.theme.rawValue)
+                    Text(category.theme.title)
                         .font(.system(size: 14))
                         .padding(7)
                         .background(category.theme.color)
@@ -47,11 +47,11 @@ struct CategoriesCellView: View {
 
 #Preview {
     ForEach(CategoryModel.mockArray, id: \.self) { category in
-        CategoriesCellView(category: category) {
+        CategoryCellView(category: category) {
             
         }
         
-        CategoriesCellView(category: category) {
+        CategoryCellView(category: category) {
             
         }
     }

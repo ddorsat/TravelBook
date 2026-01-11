@@ -8,15 +8,28 @@
 import SwiftUI
 
 struct FavoritesView: View {
-    @StateObject private var vm = FavoritesViewModel()
+    @StateObject private var vm: FavoritesViewModel
+    
+    init(authService: any AuthServiceProtocol,
+         favoritesService: any FavoritesServiceProtocol) {
+        _vm = StateObject(wrappedValue: FavoritesViewModel(authService: authService, favoritesService: favoritesService))
+    }
     
     var body: some View {
         NavigationStack(path: $vm.favoritesRoutes) {
-            List(CellModel.mockArray, id: \.self) { cell in
-                FavoritesCellView(cell: cell) {
-                    vm.favoritesRoutes.append(.cellDetails(cell))
+            Group {
+                if vm.favorites.isEmpty {
+                    ContentUnavailableView("Нет избранного", systemImage: "")
+                } else {
+                    List(vm.favorites, id: \.id) { cell in
+                        FavoritesCellView(cell: cell) {
+                            vm.favoritesRoutes.append(.cellDetails(cell))
+                        } handleFavorite: { _ in
+                            vm.handleFavoriteToggle(for: cell)
+                        }
+                        .listRowSeparator(.hidden)
+                    }
                 }
-                .listRowSeparator(.hidden)
             }
             .navigationTitle("Избранное")
             .navigationBarTitleDisplayMode(.inline)
@@ -28,19 +41,23 @@ struct FavoritesView: View {
             .navigationDestination(for: FavoritesRoutes.self) { destination in
                 destinationView(destination)
             }
+            .onAppear {
+                vm.fetchFavorites()
+            }
         }
     }
 }
 
 extension FavoritesView {
+    @ViewBuilder
     private func destinationView(_ route: FavoritesRoutes) -> some View {
         switch route {
             case .cellDetails(let cell):
-                CellDetailsView(cell: cell)
+                CellDetailsView(cell: cell, favoritesService: vm.favoritesService)
         }
     }
 }
 
 #Preview {
-    FavoritesView()
+    FavoritesView(authService: AuthService(), favoritesService: FavoritesService())
 }

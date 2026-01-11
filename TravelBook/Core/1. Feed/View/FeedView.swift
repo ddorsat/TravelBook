@@ -8,92 +8,106 @@
 import SwiftUI
 
 struct FeedView: View {
-    @StateObject private var vm = FeedViewModel()
+    @StateObject private var vm: FeedViewModel
+    
+    let contentService: any ContentServiceProtocol
+    let favoritesService: any FavoritesServiceProtocol
+    
+    init(contentService: any ContentServiceProtocol,
+         favoritesService: any FavoritesServiceProtocol) {
+        self.contentService = contentService
+        self.favoritesService = favoritesService
+        
+        _vm = StateObject(wrappedValue: FeedViewModel(contentService: contentService, favoritesService: favoritesService))
+    }
     
     var body: some View {
         NavigationStack(path: $vm.feedRoutes) {
-            ZStack {
-                Components.backgroundColor(onlyBottom: true)
-                
-                ScrollView {
-                    VStack(alignment: .leading, spacing: 20) {
-                        VStack(alignment: .leading, spacing: 15) {
-                            HStack(spacing: 10) {
-                                Image("logo")
-                                    .resizable()
-                                    .scaledToFit()
-                                    .frame(width: 38, height: 38)
-                                    .clipShape(RoundedRectangle(cornerRadius: 10))
-                                
-                                VStack(alignment: .leading, spacing: -1) {
-                                    Text("УЧЕБНИК")
-                                    Text("ПУТЕШЕСТВИЙ")
-                                }
-                                .font(.footnote)
-                                .fontDesign(.rounded)
-                                .fontWeight(.heavy)
-                                
-                                Spacer()
-                            }
-                            
-                            FeedHeadView(cell: vm.cells.first ?? .mock) {
-                                vm.feedRoutes.append(.headCell)
-                            }
-                        }
-                        .whiteBackground()
-                        
+            if vm.cells.isEmpty {
+                ProgressView()
+            } else {
+                ZStack {
+                    Components.backgroundColor(onlyBottom: true)
+                    
+                    ScrollView {
                         VStack(alignment: .leading, spacing: 20) {
-                            HStack {
-                                Components.headerView("Популярное")
+                            VStack(alignment: .leading, spacing: 15) {
+                                HStack(spacing: 10) {
+                                    Image("logo")
+                                        .resizable()
+                                        .scaledToFit()
+                                        .frame(width: 38, height: 38)
+                                        .clipShape(RoundedRectangle(cornerRadius: 10))
+                                    
+                                    VStack(alignment: .leading, spacing: -1) {
+                                        Text("УЧЕБНИК")
+                                        Text("ПУТЕШЕСТВИЙ")
+                                    }
+                                    .font(.footnote)
+                                    .fontDesign(.rounded)
+                                    .fontWeight(.heavy)
+                                    
+                                    Spacer()
+                                }
                                 
-                                Spacer()
-                                
-                                Button {
-                                    vm.feedRoutes.append(.popular(CellModel.mock))
-                                } label: {
-                                    Text("Ещё")
-                                        .foregroundStyle(.blue)
+                                if let head = vm.headCell {
+                                    FeedHeadView(cell: head) {
+                                        vm.feedRoutes.append(.headCell(head))
+                                    }
                                 }
                             }
+                            .whiteBackground()
                             
-                            ScrollView(.horizontal) {
-                                LazyHGrid(rows: GridSetups.horizontalGrid, spacing: 15) {
+                            VStack(alignment: .leading, spacing: 20) {
+                                HStack {
+                                    Components.headerView("Популярное")
+                                    
+                                    Spacer()
+                                    
+                                    Button {
+                                        vm.feedRoutes.append(.popular)
+                                    } label: {
+                                        Text("Ещё")
+                                            .foregroundStyle(.blue)
+                                    }
+                                }
+                                
+                                ScrollView(.horizontal) {
+                                    LazyHGrid(rows: GridSetups.horizontalGrid, spacing: 15) {
+                                        ForEach(vm.cells, id: \.self) { cell in
+                                            FeedBigCellView(cell: cell) {
+                                                vm.feedRoutes.append(.bigCell(cell))
+                                            }
+                                        }
+                                    }
+                                    .horizontalPadding(true)
+                                }
+                                .horizontalPadding(false)
+                            }
+                            .whiteBackground()
+                            
+                            VStack(alignment: .leading, spacing: 20) {
+                                Components.headerView("Лента")
+                                
+                                LazyVGrid(columns: GridSetups.verticalGrid, spacing: 25) {
                                     ForEach(vm.cells, id: \.self) { cell in
-                                        FeedBigCellView(cell: cell) {
-                                            vm.feedRoutes.append(.bigCell(cell))
+                                        FeedCellView(cell: cell) {
+                                            vm.feedRoutes.append(.feedCell(cell))
                                         }
                                     }
                                 }
-                                .horizontalPadding(true)
                             }
-                            .horizontalPadding(false)
+                            .whiteBackground()
                         }
-                        .whiteBackground()
-                        
-                        VStack(alignment: .leading, spacing: 20) {
-                            Components.headerView("Лента")
-                            
-                            LazyVGrid(columns: GridSetups.verticalGrid, spacing: 25) {
-                                ForEach(vm.cells, id: \.self) { cell in
-                                    FeedCellView(cell: cell) {
-                                        vm.feedRoutes.append(.feedCell(cell))
-                                    }
-                                }
-                            }
-                        }
-                        .whiteBackground()
                     }
                 }
-            }
-            .navigationTitle("Лента")
-            .navigationBarTitleDisplayMode(.inline)
-            .scrollIndicators(.hidden)
-            .bottomAreaPadding()
-            .navigationDestination(for: FeedRoutes.self) { destination in
-                destinationView(destination)
-            }
-            .task {
-                await vm.fetchData()
+                .navigationTitle("Лента")
+                .navigationBarTitleDisplayMode(.inline)
+                .scrollIndicators(.hidden)
+                .bottomAreaPadding()
+                .navigationDestination(for: FeedRoutes.self) { destination in
+                    destinationView(destination)
+                }
             }
         }
     }
@@ -103,24 +117,20 @@ extension FeedView {
     @ViewBuilder
     private func destinationView(_ route: FeedRoutes) -> some View {
         switch route {
-            case .headCell:
-                CellDetailsView(cell: .mock)
-            case .popular(let cell):
-                PopularView(cell: cell) { cell in
+            case .headCell(let cell):
+                CellDetailsView(cell: cell, favoritesService: favoritesService)
+            case .popular:
+                PopularView(cells: vm.popularCells) { cell in
                     vm.feedRoutes.append(.cellDetails(cell))
                 }
-            case .bigCell(let cell):
-                CellDetailsView(cell: cell)
-            case .feedCell(let cell):
-                CellDetailsView(cell: cell)
-            case .cellDetails(let cell):
-                CellDetailsView(cell: cell)
+            case .bigCell(let cell), .feedCell(let cell), .cellDetails(let cell):
+                CellDetailsView(cell: cell, favoritesService: favoritesService)
         }
     }
 }
 
 #Preview {
     NavigationStack {
-        FeedView()
+        FeedView(contentService: ContentService(), favoritesService: FavoritesService())
     }
 }

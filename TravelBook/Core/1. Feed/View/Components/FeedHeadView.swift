@@ -17,7 +17,8 @@ struct FeedHeadView: View {
                 Image(cell.image)
                     .resizable()
                     .scaledToFill()
-                    .frame(width: .infinity, height: UIScreen.main.bounds.height / 6)
+                    .frame(width: .infinity,
+                           height: UIScreen.main.bounds.height / 6)
                     .clipShape(RoundedRectangle(cornerRadius: 15))
                 VStack(alignment: .leading, spacing: 10) {
                     Text(cell.title)

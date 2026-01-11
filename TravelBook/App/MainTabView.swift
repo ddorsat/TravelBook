@@ -8,24 +8,31 @@
 import SwiftUI
 
 struct MainTabView: View {
+    @EnvironmentObject var authService: AuthService
+    @EnvironmentObject var favoritesService: FavoritesService
+    @EnvironmentObject var contentService: ContentService
+    
     @State private var selectedTab: Tabs = .feed
     
     var body: some View {
         TabView(selection: $selectedTab) {
             Tab(Tabs.feed.rawValue, systemImage: Tabs.feed.icon, value: .feed) {
-                FeedView()
+                FeedView(contentService: contentService,
+                         favoritesService: favoritesService)
             }
             
             Tab(Tabs.search.rawValue, systemImage: Tabs.search.icon, value: .search) {
-                SearchView()
+                SearchView(contentService: contentService,
+                           favoritesService: favoritesService)
             }
             
             Tab(Tabs.favorites.rawValue, systemImage: Tabs.favorites.icon, value: .favorites) {
-                FavoritesView()
+                FavoritesView(authService: authService,
+                              favoritesService: favoritesService)
             }
             
             Tab(Tabs.profile.rawValue, systemImage: Tabs.profile.icon, value: .profile) {
-                ProfileView()
+                ProfileView(authService: authService)
             }
         }
         .tabBarMinimizeBehavior(.onScrollDown)
@@ -50,4 +57,7 @@ fileprivate enum Tabs: String {
 
 #Preview {
     MainTabView()
+        .environmentObject(ContentService())
+        .environmentObject(AuthService())
+        .environmentObject(FavoritesService())
 }

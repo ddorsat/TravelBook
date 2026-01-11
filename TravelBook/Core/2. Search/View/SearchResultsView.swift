@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct SearchResultsView: View {
-    let cell: CellModel
+    @ObservedObject var vm: SearchViewModel
     let onTapHandler: (CellModel) -> Void
     
     var body: some View {
@@ -16,7 +16,7 @@ struct SearchResultsView: View {
             Components.backgroundColor(onlyBottom: true)
             
             ScrollView {
-                CellFeedView(cell: .mock) { cell in
+                CellFeedView(cell: vm.searchResults) { cell in
                     onTapHandler(cell)
                 }
             }
@@ -29,7 +29,7 @@ struct SearchResultsView: View {
 
 #Preview {
     NavigationStack {
-        SearchResultsView(cell: .mock) { _ in
+        SearchResultsView(vm: SearchViewModel(contentService: ContentService())) { _ in
             
         }
     }

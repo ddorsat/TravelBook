@@ -8,19 +8,26 @@
 import SwiftUI
 
 struct ProfileView: View {
-    @StateObject private var vm = ProfileViewModel()
+    @StateObject private var vm: ProfileViewModel
+    
+    init(authService: any AuthServiceProtocol) {
+        _vm = StateObject(wrappedValue: ProfileViewModel(authService: authService))
+    }
     
     var body: some View {
         NavigationStack(path: $vm.profileRoutes) {
             List {
                 Section {
-                    ProfileCellView(user: .mock, type: .signInUp) {
-                        vm.profileRoutes.append(.signInUp)
+                    switch vm.authState {
+                        case .loggedIn(let user):
+                            ProfileCellView(user: user, type: .signedIn) {
+                                vm.profileRoutes.append(.loggedIn)
+                            }
+                        case .loggedOut:
+                            ProfileCellView(user: .mock, type: .signInUp) {
+                                vm.profileRoutes.append(.loginRegister)
+                            }
                     }
-                        
-//                    ProfileCellView(user: .mock, type: .signedIn) {
-//                        vm.profileRoutes.append(.signedIn)
-//                    }
                 } header: {
                     Color.clear.frame(height: 70)
                 }
@@ -59,58 +66,24 @@ extension ProfileView {
     @ViewBuilder
     private func destinationView(_ route: ProfileRoutes) -> some View {
         switch route {
-            case .signInUp:
-                SignInUpView {
-                    // APPLE SIGN IN/UP
-                } signInButton: {
-                    vm.profileRoutes.append(.signIn)
-                } signUpButton: {
-                    vm.profileRoutes.append(.signUp)
-                }
+            case .loginRegister:
+                LoginRegisterView(vm: vm)
+            case .login:
+                LoginRegisterBuilderView(vm: vm, type: .login)
+            case .register:
+                LoginRegisterBuilderView(vm: vm, type: .register)
+            case .loggedIn:
+                LoggedInView(vm: vm)
             case .appearance:
                 AppearanceView()
             case .notifications:
                 NotificationsView()
             case .aboutApp:
                 AboutAppView()
-            case .signIn:
-                SignInUpBuilderView(email: $vm.email,
-                                    password: $vm.password,
-                                    showInvalidAlert: $vm.showInvalidAlert,
-                                    invalidAlertMessage: $vm.invalidAlertMessage,
-                                    showSignedInAlert: $vm.showSignedInAlert,
-                                    signedInAlertMessage: $vm.signedInAlert,
-                                    clearUsername: nil) {
-                    vm.email = ""
-                } clearPassword: {
-                    vm.password = ""
-                } onTapHandler: {
-                    
-                }
-            case .signUp:
-                SignInUpBuilderView(username: $vm.username,
-                                    email: $vm.email,
-                                    password: $vm.password,
-                                    showInvalidAlert: $vm.showInvalidAlert,
-                                    invalidAlertMessage: $vm.invalidAlertMessage,
-                                    showSignedInAlert: $vm.showSignedInAlert,
-                                    signedInAlertMessage: $vm.signedUpAlert) {
-                    vm.username = ""
-                } clearEmail: {
-                    vm.email = ""
-                } clearPassword: {
-                    vm.password = ""
-                } onTapHandler: {
-                    
-                }
-            case .signedIn:
-                SignedInView() {
-                        
-            }
         }
     }
 }
 
 #Preview {
-    ProfileView()
+    ProfileView(authService: AuthService())
 }

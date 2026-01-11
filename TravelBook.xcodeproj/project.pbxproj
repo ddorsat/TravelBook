@@ -6,10 +6,6 @@
 	objectVersion = 77;
 	objects = {
 
-/* Begin PBXBuildFile section */
-		3657C4622F09A8B6008AD2AE /* AlertKit in Frameworks */ = {isa = PBXBuildFile; productRef = 3657C4612F09A8B6008AD2AE /* AlertKit */; };
-/* End PBXBuildFile section */
-
 /* Begin PBXFileReference section */
 		3609B6792F06CF3D00C9A8FD /* TravelBook.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TravelBook.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -27,7 +23,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				3657C4622F09A8B6008AD2AE /* AlertKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -70,7 +65,6 @@
 			);
 			name = TravelBook;
 			packageProductDependencies = (
-				3657C4612F09A8B6008AD2AE /* AlertKit */,
 			);
 			productName = TravelBook;
 			productReference = 3609B6792F06CF3D00C9A8FD /* TravelBook.app */;
@@ -101,7 +95,6 @@
 			mainGroup = 3609B6702F06CF3D00C9A8FD;
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
-				3657C4602F09A8B6008AD2AE /* XCRemoteSwiftPackageReference "AlertKit" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 3609B67A2F06CF3D00C9A8FD /* Products */;
@@ -353,25 +346,6 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
-
-/* Begin XCRemoteSwiftPackageReference section */
-		3657C4602F09A8B6008AD2AE /* XCRemoteSwiftPackageReference "AlertKit" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "git@github.com:sparrowcode/AlertKit.git";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 5.1.9;
-			};
-		};
-/* End XCRemoteSwiftPackageReference section */
-
-/* Begin XCSwiftPackageProductDependency section */
-		3657C4612F09A8B6008AD2AE /* AlertKit */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 3657C4602F09A8B6008AD2AE /* XCRemoteSwiftPackageReference "AlertKit" */;
-			productName = AlertKit;
-		};
-/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 3609B6712F06CF3D00C9A8FD /* Project object */;
 }

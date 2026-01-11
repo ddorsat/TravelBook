@@ -7,16 +7,17 @@
 
 import SwiftUI
 
-struct SignedInView: View {
-    let onTapHandler: () -> Void
+struct LoggedInView: View {
+    @ObservedObject var vm: ProfileViewModel
     
     var body: some View {
         List {
             Section {
                 ProfileCellView(user: .mock, type: .logOut) {
-                    onTapHandler()
+                    vm.logOut()
                 }
             }
+            .scrollContentBackground(.hidden)
             .navigationTitle("Профиль")
             .navigationBarTitleDisplayMode(.inline)
         }
@@ -24,7 +25,5 @@ struct SignedInView: View {
 }
 
 #Preview {
-    SignedInView() {
-        
-    }
+    LoggedInView(vm: ProfileViewModel(authService: AuthService()))
 }

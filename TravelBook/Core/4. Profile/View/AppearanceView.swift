@@ -8,14 +8,14 @@
 import SwiftUI
 
 struct AppearanceView: View {
-    @State private var selectedTheme: AppTheme = .light
+    @StateObject private var vm = AppearanceViewModel()
     
     var body: some View {
         List {
             Section {
                 ForEach(AppTheme.allCases, id: \.self) { theme in
                     Button {
-                        selectedTheme = theme
+                        vm.setTheme(theme)
                     } label: {
                         HStack {
                             Text(theme.rawValue)
@@ -23,7 +23,7 @@ struct AppearanceView: View {
                                                         
                             Spacer()
                                                         
-                            if selectedTheme == theme {
+                            if vm.currentTheme == theme {
                                 Image(systemName: "checkmark")
                                     .foregroundStyle(.blue)
                                     .fontWeight(.semibold)
@@ -50,6 +50,14 @@ enum AppTheme: String, CaseIterable {
     case light = "Светлая"
     case dark = "Темная"
     case system = "Системная"
+    
+    var colorScheme: ColorScheme? {
+        switch self {
+            case .light: return .light
+            case .dark: return .dark
+            case .system: return nil
+        }
+    }
 }
 
 #Preview {

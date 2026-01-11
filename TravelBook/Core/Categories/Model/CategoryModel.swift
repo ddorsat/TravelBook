@@ -8,27 +8,27 @@
 import Foundation
 import SwiftUI
 
-struct CategoryModel: Hashable, Codable {
+struct CategoryModel: Hashable, Codable, Identifiable {
+    let id: UUID
     let image: String
     let theme: Categories
     let title: String
-    let cells: [CellModel]
 }
 
 extension CategoryModel {
-    static let mock = CategoryModel(image: "fraud", theme: .fraud, title: "Как не стать жертвой обмана", cells: [])
+    static let mock = CategoryModel(id: UUID(), image: "fraud", theme: .fraud, title: "Как не стать жертвой обмана")
     
     static let mockArray: [CategoryModel] = [
-        CategoryModel(image: "abroad", theme: .abroad, title: "Главный чек-лист перед выездом", cells: []),
-        CategoryModel(image: "fraud", theme: .fraud, title: "Как не стать жертвой обмана", cells: []),
-        CategoryModel(image: "leisure", theme: .leisure, title: "ТОП-10 развлечений для активного отдыха", cells: CellModel.leisureMockArray),
-        CategoryModel(image: "food", theme: .food, title: "Гастрономический туризм: что пробовать", cells: CellModel.foodMockArray),
-        CategoryModel(image: "tickets", theme: .tickets, title: "Ловим дешевые авиабилеты", cells: []),
-        CategoryModel(image: "packing", theme: .packing, title: "Как собрать чемодан за 15 минут", cells: []),
-        CategoryModel(image: "culture", theme: .culture, title: "Языковой барьер и местные традиции", cells: []),
-        CategoryModel(image: "health", theme: .health, title: "Что должно быть в аптечке туриста", cells: []),
-        CategoryModel(image: "family", theme: .family, title: "Путешествия с маленькими детьми", cells: []),
-        CategoryModel(image: "budget", theme: .budget, title: "Как сэкономить 30% бюджета поездки", cells: [])]
+        CategoryModel(id: UUID(), image: "abroad", theme: .abroad, title: "Главный чек-лист перед выездом"),
+        CategoryModel(id: UUID(), image: "fraud", theme: .fraud, title: "Как не стать жертвой обмана"),
+        CategoryModel(id: UUID(), image: "leisure", theme: .leisure, title: "ТОП-10 развлечений для активного отдыха"),
+        CategoryModel(id: UUID(), image: "food", theme: .food, title: "Гастрономический туризм: что пробовать"),
+        CategoryModel(id: UUID(), image: "tickets", theme: .tickets, title: "Ловим дешевые авиабилеты"),
+        CategoryModel(id: UUID(), image: "packing", theme: .packing, title: "Как собрать чемодан за 15 минут"),
+        CategoryModel(id: UUID(), image: "culture", theme: .culture, title: "Языковой барьер и местные традиции"),
+        CategoryModel(id: UUID(), image: "health", theme: .health, title: "Что должно быть в аптечке туриста"),
+        CategoryModel(id: UUID(), image: "family", theme: .family, title: "Путешествия с маленькими детьми"),
+        CategoryModel(id: UUID(), image: "budget", theme: .budget, title: "Как сэкономить 30% бюджета поездки")]
 }
 
 enum Categories: String, Codable, CaseIterable {

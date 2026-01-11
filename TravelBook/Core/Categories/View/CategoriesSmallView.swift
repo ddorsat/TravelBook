@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct TrendingCellView: View {
+struct CategoriesSmallView: View {
     let category: CategoryModel
     let onTapHandler: () -> Void
     
@@ -24,7 +24,7 @@ struct TrendingCellView: View {
                             .foregroundStyle(.white)
                     }
                 
-                Text(category.theme.rawValue)
+                Text(category.theme.title)
                     .fontWeight(.medium)
             }
             
@@ -46,7 +46,7 @@ struct TrendingCellView: View {
 }
 
 #Preview {
-    TrendingCellView(category: .mockArray[0]) {
+    CategoriesSmallView(category: .mockArray[0]) {
         
     }
 }
