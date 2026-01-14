@@ -11,11 +11,14 @@ struct FeedView: View {
     @StateObject private var vm: FeedViewModel
     
     let contentService: any ContentServiceProtocol
+    let authService: any AuthServiceProtocol
     let favoritesService: any FavoritesServiceProtocol
     
     init(contentService: any ContentServiceProtocol,
+         authService: any AuthServiceProtocol,
          favoritesService: any FavoritesServiceProtocol) {
         self.contentService = contentService
+        self.authService = authService
         self.favoritesService = favoritesService
         
         _vm = StateObject(wrappedValue: FeedViewModel(contentService: contentService, favoritesService: favoritesService))
@@ -74,7 +77,7 @@ struct FeedView: View {
                                 
                                 ScrollView(.horizontal) {
                                     LazyHGrid(rows: GridSetups.horizontalGrid, spacing: 15) {
-                                        ForEach(vm.popularCells.prefix(6), id: \.self) { cell in
+                                        ForEach(vm.popularCells.prefix(5), id: \.self) { cell in
                                             FeedBigCellView(cell: cell) {
                                                 vm.feedRoutes.append(.bigCell(cell))
                                             }
@@ -108,6 +111,9 @@ struct FeedView: View {
                 .navigationDestination(for: FeedRoutes.self) { destination in
                     destinationView(destination)
                 }
+                .refreshable {
+                    vm.fetchData()
+                }
             }
         }
     }
@@ -118,19 +124,25 @@ extension FeedView {
     private func destinationView(_ route: FeedRoutes) -> some View {
         switch route {
             case .headCell(let cell):
-                CellDetailsView(cell: cell, favoritesService: favoritesService)
+                CellDetailsView(cell: cell,
+                                authService: authService,
+                                favoritesService: favoritesService)
             case .popular:
                 PopularView(cells: vm.popularCells) { cell in
                     vm.feedRoutes.append(.cellDetails(cell))
                 }
             case .bigCell(let cell), .feedCell(let cell), .cellDetails(let cell):
-                CellDetailsView(cell: cell, favoritesService: favoritesService)
+                CellDetailsView(cell: cell,
+                                authService: authService,
+                                favoritesService: favoritesService)
         }
     }
 }
 
 #Preview {
     NavigationStack {
-        FeedView(contentService: ContentService(), favoritesService: FavoritesService())
+        FeedView(contentService: ContentService(),
+                 authService: AuthService(),
+                 favoritesService: FavoritesService())
     }
 }

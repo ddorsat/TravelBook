@@ -19,13 +19,15 @@ struct LoginRegisterView: View {
                 .fontWeight(.semibold)
                 .padding(.bottom, 25)
                 
-            VStack(spacing: 18) {
-                LoginRegisterButtonView(type: .apple) {
-                    // APPLE REGISTER
-                }
-                
-                LoginRegisterButtonView(type: .mail) {
-                    vm.profileRoutes.append(.login)
+            VStack(spacing: 20) {
+                VStack(spacing: 15) {
+                    LoginRegisterButtonView(type: .apple) {
+                        // APPLE REGISTER
+                    }
+                    
+                    LoginRegisterButtonView(type: .mail) {
+                        vm.profileRoutes.append(.login)
+                    }
                 }
                 
                 HStack {

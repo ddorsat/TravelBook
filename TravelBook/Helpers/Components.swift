@@ -25,8 +25,8 @@ struct Components {
     static func customDivider(isFavorites: Bool) -> some View {
         Rectangle()
             .foregroundStyle(.divider)
-            .frame(height: 0.5)
-            .padding(.leading, isFavorites ? 81 : 15)
+            .frame(height: 2 / UIScreen.main.scale)
+            .padding(.leading, isFavorites ? 81 : 16)
             .padding(.top, isFavorites ? 5 : 0)
             .horizontalPadding(false)
     }

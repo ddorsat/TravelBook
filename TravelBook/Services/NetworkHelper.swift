@@ -81,4 +81,12 @@ struct NetworkHelper {
             throw NetworkError.decodingError
         }
     }
+    
+    static func buildURL(url: String, params: [String: String]) -> String? {
+        var components = URLComponents(string: url)
+        
+        components?.queryItems = params.map { URLQueryItem(name: $0.key, value: $0.value) }
+        
+        return components?.url?.absoluteString
+    }
 }

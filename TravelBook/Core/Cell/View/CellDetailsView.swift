@@ -6,14 +6,20 @@
 //
 
 import SwiftUI
+import Combine
 import Kingfisher
 
 struct CellDetailsView: View {
     @StateObject private var vm: CellDetailsViewModel
+    @State private var showAuthAlert = false
     let cell: CellModel
+    let authService: any AuthServiceProtocol
     
-    init(cell: CellModel, favoritesService: any FavoritesServiceProtocol) {
+    init(cell: CellModel,
+         authService: any AuthServiceProtocol,
+         favoritesService: any FavoritesServiceProtocol) {
         self.cell = cell
+        self.authService = authService
         _vm = StateObject(wrappedValue: CellDetailsViewModel(cell: cell, favoritesService: favoritesService))
     }
     
@@ -32,7 +38,15 @@ struct CellDetailsView: View {
                                 isSearch: false,
                                 isCellDetails: true,
                                 isFavorite: $vm.isFavorite) {
-                    vm.toggleFavorite()
+                    if case .loggedIn = authService.authState.value {
+                        vm.toggleFavorite()
+                    } else {
+                        withAnimation {
+                            vm.isFavorite?.toggle()
+                        }
+                        
+                        showAuthAlert = true
+                    }
                 }
                 
                 TabView {
@@ -51,9 +65,14 @@ struct CellDetailsView: View {
             .horizontalPadding(true)
             .bottomAreaPadding()
             .padding(.top, -117)
+            .alert("Пожалуйста, авторизуйтесь или зарегистрируйтесь", isPresented: $showAuthAlert) {
+                Button("OK", role: .cancel) {}
+            }
         }
     }
 }
 #Preview {
-    CellDetailsView(cell: .mock, favoritesService: FavoritesService())
+    CellDetailsView(cell: .mock,
+                    authService: AuthService(),
+                    favoritesService: FavoritesService())
 }

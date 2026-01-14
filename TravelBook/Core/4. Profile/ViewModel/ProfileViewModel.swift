@@ -15,17 +15,14 @@ enum ProfileRoutes: Hashable {
 
 @MainActor
 final class ProfileViewModel: ObservableObject {
-    // MARK: - Input
     @Published var username = ""
     @Published var email = ""
     @Published var password = ""
     
-    // MARK: - States
     @Published var profileRoutes: [ProfileRoutes] = []
     @Published private(set) var authState = AuthState.loggedOut
     @Published var isLoading = false
     
-    // MARK: - Errors
     @Published var showError = false
     @Published var errorMessage = ""
     

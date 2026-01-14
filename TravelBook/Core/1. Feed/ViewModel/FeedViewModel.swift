@@ -41,14 +41,18 @@ final class FeedViewModel: ObservableObject {
         
         setupSubscriptions()
         
-        Task {
-            await contentService.fetchData()
-            await favoritesService.fetchFavorites()
-        }
+        fetchData()
     }
     
     deinit {
         cancellables.removeAll()
+    }
+    
+    func fetchData() {
+        Task {
+            await contentService.fetchData()
+            await favoritesService.fetchFavorites()
+        }
     }
     
     private func setupSubscriptions() {

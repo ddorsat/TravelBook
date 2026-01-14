@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct LoginRegisterButtonView: View {
+    @Environment(\.colorScheme) private var colorScheme
     let type: SignInButtons
     let onTapHandler: () -> Void
     
@@ -16,14 +17,14 @@ struct LoginRegisterButtonView: View {
             HStack {
                 Image(systemName: type.icon)
                     .font(.system(size: type == .apple ? 23 : 18))
-                    .foregroundStyle(type == .apple ? .white : .primary)
+                    .foregroundStyle(type == .apple ? .appleTitle : .emailTitle)
                     .fontWeight(type == .mail ? .semibold : .regular)
                     .padding(.leading, type == .apple ? 2 : 0)
                 
                 Spacer()
                     
                 Text(type.rawValue)
-                    .foregroundStyle(type == .apple ? .white : .black)
+                    .foregroundStyle(type == .apple ? .appleTitle : .emailTitle)
                     .fontWeight(.semibold)
                     .padding(.trailing, type == .mail ? 35 : 22)
                 

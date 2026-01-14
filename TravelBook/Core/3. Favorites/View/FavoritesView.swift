@@ -10,8 +10,11 @@ import SwiftUI
 struct FavoritesView: View {
     @StateObject private var vm: FavoritesViewModel
     
+    let authService: any AuthServiceProtocol
+    
     init(authService: any AuthServiceProtocol,
          favoritesService: any FavoritesServiceProtocol) {
+        self.authService = authService
         _vm = StateObject(wrappedValue: FavoritesViewModel(authService: authService, favoritesService: favoritesService))
     }
     
@@ -41,6 +44,9 @@ struct FavoritesView: View {
             .navigationDestination(for: FavoritesRoutes.self) { destination in
                 destinationView(destination)
             }
+            .refreshable {
+                vm.fetchFavorites()
+            }
             .onAppear {
                 vm.fetchFavorites()
             }
@@ -53,7 +59,9 @@ extension FavoritesView {
     private func destinationView(_ route: FavoritesRoutes) -> some View {
         switch route {
             case .cellDetails(let cell):
-                CellDetailsView(cell: cell, favoritesService: vm.favoritesService)
+                CellDetailsView(cell: cell,
+                                authService: authService,
+                                favoritesService: vm.favoritesService)
         }
     }
 }

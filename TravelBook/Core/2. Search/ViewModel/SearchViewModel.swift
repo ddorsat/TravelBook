@@ -93,5 +93,9 @@ final class SearchViewModel: ObservableObject {
         
         self.searchResults = filtered
     }
+    
+    func refreshData() {
+        Task { await contentService.fetchCells() }
+    }
 }
 

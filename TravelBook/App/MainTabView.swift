@@ -12,17 +12,19 @@ struct MainTabView: View {
     @EnvironmentObject var favoritesService: FavoritesService
     @EnvironmentObject var contentService: ContentService
     
-    @State private var selectedTab: Tabs = .profile
+    @State private var selectedTab: Tabs = .feed
     
     var body: some View {
         TabView(selection: $selectedTab) {
             Tab(Tabs.feed.rawValue, systemImage: Tabs.feed.icon, value: .feed) {
                 FeedView(contentService: contentService,
+                         authService: authService,
                          favoritesService: favoritesService)
             }
             
             Tab(Tabs.search.rawValue, systemImage: Tabs.search.icon, value: .search) {
                 SearchView(contentService: contentService,
+                           authService: authService,
                            favoritesService: favoritesService)
             }
             

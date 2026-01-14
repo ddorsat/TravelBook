@@ -12,11 +12,14 @@ struct SearchView: View {
     @State private var isShown = false
     
     let contentService: any ContentServiceProtocol
+    let authService: any AuthServiceProtocol
     let favoritesService: any FavoritesServiceProtocol
     
     init(contentService: any ContentServiceProtocol,
+         authService: any AuthServiceProtocol,
          favoritesService: any FavoritesServiceProtocol) {
         self.contentService = contentService
+        self.authService = authService
         self.favoritesService = favoritesService
         
         _vm = StateObject(wrappedValue: SearchViewModel(contentService: contentService))
@@ -86,6 +89,9 @@ struct SearchView: View {
                 }
                 .navigationDestination(for: SearchRoutes.self,
                                        destination: destinationView)
+                .refreshable {
+                    vm.refreshData()
+                }
             }
         }
     }
@@ -96,13 +102,17 @@ extension SearchView {
     private func destinationView(_ destination: SearchRoutes) -> some View {
         switch destination {
             case .searchFeedCellDetails(let cell):
-                CellDetailsView(cell: cell, favoritesService: favoritesService)
+                CellDetailsView(cell: cell,
+                                authService: authService,
+                                favoritesService: favoritesService)
             case .searchResults:
                 SearchResultsView(vm: vm) { cell in
                     vm.searchRoutes.append(.searchResultsCellDetails(cell))
                 }
             case .searchResultsCellDetails(let cell):
-                CellDetailsView(cell: cell, favoritesService: favoritesService)
+                CellDetailsView(cell: cell,
+                                authService: authService,
+                                favoritesService: favoritesService)
             case .categories:
                 CategoriesView(categories: vm.categories) { category in
                     vm.searchRoutes.append(.categoryCells(category))
@@ -112,13 +122,17 @@ extension SearchView {
                     vm.searchRoutes.append(.categoryCellDetails(cell))
                 }
             case .categoryCellDetails(let cell):
-                CellDetailsView(cell: cell, favoritesService: favoritesService)
+                CellDetailsView(cell: cell,
+                                authService: authService, 
+                                favoritesService: favoritesService)
         }
     }
 }
 
 #Preview {
     NavigationStack {
-        SearchView(contentService: ContentService(), favoritesService: FavoritesService())
+        SearchView(contentService: ContentService(),
+                   authService: AuthService(),
+                   favoritesService: FavoritesService())
     }
 }

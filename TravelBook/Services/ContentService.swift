@@ -13,6 +13,7 @@ protocol ContentServiceProtocol: ObservableObject {
     var allCategories: CurrentValueSubject<[CategoryModel], Never> { get }
     
     func fetchData() async
+    func fetchCells() async
 }
 
 final class ContentService: ContentServiceProtocol {
@@ -30,8 +31,9 @@ final class ContentService: ContentServiceProtocol {
         }
     }
     
-    private func fetchCells() async {
+    func fetchCells() async {
         let url = "\(baseURL)/cells"
+        
         do {
             let loadedCells: [CellModel] = try await NetworkHelper.fetch(url: url)
             await MainActor.run { self.allCells.send(loadedCells) }
@@ -42,6 +44,7 @@ final class ContentService: ContentServiceProtocol {
     
     private func fetchCategories() async {
         let url = "\(baseURL)/categories"
+        
         do {
             let loadedCategories: [CategoryModel] = try await NetworkHelper.fetch(url: url)
             await MainActor.run { self.allCategories.send(loadedCategories) }

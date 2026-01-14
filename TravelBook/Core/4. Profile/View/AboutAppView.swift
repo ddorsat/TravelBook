@@ -14,7 +14,7 @@ struct AboutAppView: View {
                 
             VStack(spacing: 10) {
                 Text("УЧЕБНИК ПУТЕШЕСТВИЙ")
-                    .foregroundStyle(.gray)
+                    .foregroundStyle(.about)
                     .fontDesign(.monospaced)
                     .fontWeight(.medium)
                     
