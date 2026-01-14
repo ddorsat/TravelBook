@@ -47,9 +47,7 @@ struct NetworkHelper {
             request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
         }
         
-        if let body = body {
-            request.httpBody = try JSONEncoder().encode(body)
-        }
+        if let body { request.httpBody = try JSONEncoder().encode(body) }
         
         let (data, response) = try await URLSession.shared.data(for: request)
         
@@ -80,13 +78,5 @@ struct NetworkHelper {
         } catch {
             throw NetworkError.decodingError
         }
-    }
-    
-    static func buildURL(url: String, params: [String: String]) -> String? {
-        var components = URLComponents(string: url)
-        
-        components?.queryItems = params.map { URLQueryItem(name: $0.key, value: $0.value) }
-        
-        return components?.url?.absoluteString
     }
 }

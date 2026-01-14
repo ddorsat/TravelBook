@@ -20,13 +20,11 @@ enum FeedRoutes: Hashable {
 final class FeedViewModel: ObservableObject {
     @Published var feedRoutes: [FeedRoutes] = []
     @Published var cells: [CellModel] = []
+    @Published var popularCells: [CellModel] = []
+    @Published var canLoadMore = false
     
     let contentService: any ContentServiceProtocol
     let favoritesService: any FavoritesServiceProtocol
-    
-    var popularCells: [CellModel] {
-        return cells.filter { $0.isPopular }
-    }
     
     var headCell: CellModel? {
         return cells.first(where: { $0.isHeadCell }) ?? cells.first
@@ -39,13 +37,32 @@ final class FeedViewModel: ObservableObject {
         self.contentService = contentService
         self.favoritesService = favoritesService
         
-        setupSubscriptions()
+        self.cells = contentService.feedCells.value
+        self.popularCells = contentService.popularCells.value
         
+        setupSubscriptions()
         fetchData()
     }
     
     deinit {
         cancellables.removeAll()
+    }
+    
+    private func setupSubscriptions() {
+        contentService.feedCells
+            .receive(on: RunLoop.main)
+            .assign(to: \.cells, on: self)
+            .store(in: &cancellables)
+        
+        contentService.popularCells
+            .receive(on: RunLoop.main)
+            .assign(to: \.popularCells, on: self)
+            .store(in: &cancellables)
+        
+        contentService.canLoadMoreFeed
+            .receive(on: RunLoop.main)
+            .assign(to: \.canLoadMore, on: self)
+            .store(in: &cancellables)
     }
     
     func fetchData() {
@@ -55,11 +72,8 @@ final class FeedViewModel: ObservableObject {
         }
     }
     
-    private func setupSubscriptions() {
-        contentService.allCells
-            .receive(on: RunLoop.main)
-            .assign(to: \.cells, on: self)
-            .store(in: &cancellables)
+    func fetchMoreCells() {
+        Task { await contentService.fetchMoreFeedCells() }
     }
 }
 

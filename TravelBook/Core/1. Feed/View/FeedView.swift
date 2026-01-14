@@ -77,7 +77,7 @@ struct FeedView: View {
                                 
                                 ScrollView(.horizontal) {
                                     LazyHGrid(rows: GridSetups.horizontalGrid, spacing: 15) {
-                                        ForEach(vm.popularCells.prefix(5), id: \.self) { cell in
+                                        ForEach(vm.popularCells, id: \.self) { cell in
                                             FeedBigCellView(cell: cell) {
                                                 vm.feedRoutes.append(.bigCell(cell))
                                             }
@@ -93,9 +93,20 @@ struct FeedView: View {
                                 Components.headerView("Лента")
                                 
                                 LazyVGrid(columns: GridSetups.verticalGrid, spacing: 25) {
-                                    ForEach(vm.cells, id: \.self) { cell in
-                                        FeedCellView(cell: cell) {
-                                            vm.feedRoutes.append(.feedCell(cell))
+                                    Section {
+                                        ForEach(vm.cells, id: \.self) { cell in
+                                            FeedCellView(cell: cell) {
+                                                vm.feedRoutes.append(.feedCell(cell))
+                                            }
+                                        }
+                                    } footer: {
+                                        if vm.canLoadMore {
+                                            ProgressView()
+                                                .frame(maxWidth: .infinity)
+                                                .frame(height: 50)
+                                                .onAppear {
+                                                    vm.fetchMoreCells()
+                                                }
                                         }
                                     }
                                 }

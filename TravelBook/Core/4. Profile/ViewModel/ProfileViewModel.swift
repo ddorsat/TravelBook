@@ -48,28 +48,6 @@ final class ProfileViewModel: ObservableObject {
             .store(in: &cancellables)
     }
     
-    func login() {
-        guard !email.isEmpty, !password.isEmpty else {
-            showError("Пожалуйста, заполните все поля")
-            return
-        }
-        
-        isLoading = true
-        
-        Task {
-            do {
-                try await Task.sleep(for: .seconds(1))
-                try await authService.login(email: email, password: password)
-                
-                profileRoutes = []
-            } catch {
-                handleError(error)
-            }
-            
-            isLoading = false
-        }
-    }
-    
     func register() {
         guard !username.isEmpty, !email.isEmpty, !password.isEmpty else {
             showError("Пожалуйста, корректно заполните все поля")
@@ -82,6 +60,28 @@ final class ProfileViewModel: ObservableObject {
             do {
                 try await Task.sleep(for: .seconds(1))
                 try await authService.register(username: username, email: email, password: password)
+                
+                profileRoutes = []
+            } catch {
+                handleError(error)
+            }
+            
+            isLoading = false
+        }
+    }
+    
+    func login() {
+        guard !email.isEmpty, !password.isEmpty else {
+            showError("Пожалуйста, заполните все поля")
+            return
+        }
+        
+        isLoading = true
+        
+        Task {
+            do {
+                try await Task.sleep(for: .seconds(1))
+                try await authService.login(email: email, password: password)
                 
                 profileRoutes = []
             } catch {

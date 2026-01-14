@@ -47,9 +47,6 @@ struct FavoritesView: View {
             .refreshable {
                 vm.fetchFavorites()
             }
-            .onAppear {
-                vm.fetchFavorites()
-            }
         }
     }
 }

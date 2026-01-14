@@ -9,13 +9,15 @@ import Foundation
 import Combine
 
 final class AppearanceViewModel: ObservableObject {
-    private let themeKey = "selectedTheme"
     @Published var currentTheme: AppTheme = .system
+    
+    private let themeKey = "selectedTheme"
         
     init() { loadTheme() }
     
     func setTheme(_ theme: AppTheme) {
         self.currentTheme = theme
+        
         saveTheme(theme)
     }
     

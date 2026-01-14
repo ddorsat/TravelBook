@@ -38,8 +38,11 @@ struct SearchView: View {
 
                                 Spacer()
 
-                                Button("Ещё") {
+                                Button {
                                     vm.searchRoutes.append(.categories)
+                                } label: {
+                                    Text("Ещё")
+                                        .foregroundStyle(.blue)
                                 }
                             }
 
@@ -64,7 +67,7 @@ struct SearchView: View {
                         .padding(.top, 3)
                         .sectionBackground()
 
-                        VStack(alignment: .leading, spacing: 20) {
+                        LazyVStack(alignment: .leading, spacing: 20) {
                             ForEach(vm.cells, id: \.self) { cell in
                                 VStack(alignment: .leading, spacing: 10) {
                                     CellInfoView(cell: cell) { cell in
@@ -73,25 +76,34 @@ struct SearchView: View {
                                 }
                                 .sectionBackground()
                             }
+                            
+                            if vm.canLoadMore {
+                                ProgressView()
+                                    .frame(maxWidth: .infinity)
+                                    .frame(height: 50)
+                                    .onAppear {
+                                        vm.fetchMoreCells()
+                                    }
+                            }
                         }
                         .padding(.top, -30)
                     }
                 }
-                .navigationTitle("Поиск")
-                .navigationBarTitleDisplayMode(.inline)
-                .bottomAreaPadding()
-                .scrollIndicators(.hidden)
-                .searchable(text: $vm.searchText,
-                            placement: .navigationBarDrawer(displayMode: .automatic),
-                            prompt: "Поиск")
-                .onSubmit(of: .search) {
-                    Task { await vm.searchData() }
-                }
-                .navigationDestination(for: SearchRoutes.self,
-                                       destination: destinationView)
-                .refreshable {
-                    vm.refreshData()
-                }
+            }
+            .navigationTitle("Поиск")
+            .navigationBarTitleDisplayMode(.inline)
+            .bottomAreaPadding()
+            .scrollIndicators(.hidden)
+            .searchable(text: $vm.searchText,
+                        placement: .navigationBarDrawer(displayMode: .automatic),
+                        prompt: "Поиск")
+            .onSubmit(of: .search) {
+                Task { await vm.searchData() }
+            }
+            .navigationDestination(for: SearchRoutes.self,
+                                   destination: destinationView)
+            .refreshable {
+                vm.refreshData()
             }
         }
     }

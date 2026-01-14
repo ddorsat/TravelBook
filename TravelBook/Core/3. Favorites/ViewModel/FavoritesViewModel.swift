@@ -31,6 +31,8 @@ final class FavoritesViewModel: ObservableObject {
     init(authService: any AuthServiceProtocol, favoritesService: any FavoritesServiceProtocol) {
         self.authService = authService
         self.favoritesService = favoritesService
+        self.favorites = favoritesService.favoritesItems.value
+        
         setupSubscriptions()
     }
 

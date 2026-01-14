@@ -16,7 +16,7 @@ struct SearchResultsView: View {
             Components.backgroundColor()
             
             ScrollView {
-                CellFeedView(cell: vm.searchResults) { cell in
+                CellFeedView(cells: vm.searchResults) { cell in
                     onTapHandler(cell)
                 }
             }

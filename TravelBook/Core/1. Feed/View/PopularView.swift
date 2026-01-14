@@ -16,7 +16,7 @@ struct PopularView: View {
             Components.backgroundColor()
             
             ScrollView {
-                CellFeedView(cell: cells) { cell in
+                CellFeedView(cells: cells) { cell in
                     onTapHandler(cell)
                 }
             }

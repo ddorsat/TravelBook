@@ -38,6 +38,7 @@ struct LoginRegisterView: View {
                         vm.profileRoutes.append(.register)
                     } label: {
                         Text("Регистрация")
+                            .foregroundStyle(.blue)
                             .fontWeight(.medium)
                     }
                 }
