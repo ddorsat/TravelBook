@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Kingfisher
 
 struct CategoryCellView: View {
     let category: CategoryModel
@@ -14,12 +15,16 @@ struct CategoryCellView: View {
     var body: some View {
         Button(action: onTapHandler) {
             ZStack(alignment: .bottomLeading) {
-                Image(category.image)
+                KFImage(URL(string: category.image))
+                    .placeholder {
+                        ProgressView()
+                    }
                     .resizable()
                     .scaledToFill()
                     .frame(width: UIScreen.main.bounds.width / 2.2,
                            height: UIScreen.main.bounds.height / 3.3)
                     .clipped()
+                
                 
                 VStack(alignment: .leading, spacing: 10) {
                     Text(category.theme.title)

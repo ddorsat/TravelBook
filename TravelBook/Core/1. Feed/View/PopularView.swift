@@ -13,7 +13,7 @@ struct PopularView: View {
     
     var body: some View {
         ZStack {
-            Components.backgroundColor(onlyBottom: true)
+            Components.backgroundColor()
             
             ScrollView {
                 CellFeedView(cell: cells) { cell in

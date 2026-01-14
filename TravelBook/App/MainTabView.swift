@@ -12,7 +12,7 @@ struct MainTabView: View {
     @EnvironmentObject var favoritesService: FavoritesService
     @EnvironmentObject var contentService: ContentService
     
-    @State private var selectedTab: Tabs = .feed
+    @State private var selectedTab: Tabs = .profile
     
     var body: some View {
         TabView(selection: $selectedTab) {

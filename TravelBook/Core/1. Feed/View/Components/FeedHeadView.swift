@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Kingfisher
 
 struct FeedHeadView: View {
     let cell: CellModel
@@ -14,11 +15,10 @@ struct FeedHeadView: View {
     var body: some View {
         Button(action: onTapHandler) {
             ZStack(alignment: .topLeading) {
-                Image(cell.image)
+                KFImage(URL(string: cell.image))
                     .resizable()
                     .scaledToFill()
-                    .frame(width: .infinity,
-                           height: UIScreen.main.bounds.height / 6)
+                    .frame(height: UIScreen.main.bounds.height / 6)
                     .clipShape(RoundedRectangle(cornerRadius: 15))
                 VStack(alignment: .leading, spacing: 10) {
                     Text(cell.title)
@@ -29,6 +29,7 @@ struct FeedHeadView: View {
                         .font(.callout)
                         .fontWeight(.semibold)
                 }
+                .multilineTextAlignment(.leading)
                 .foregroundStyle(.white)
                 .padding(.top, 23)
                 .padding(.leading, 18)

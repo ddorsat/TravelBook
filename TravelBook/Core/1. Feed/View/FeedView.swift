@@ -27,7 +27,7 @@ struct FeedView: View {
                 ProgressView()
             } else {
                 ZStack {
-                    Components.backgroundColor(onlyBottom: true)
+                    Components.backgroundColor()
                     
                     ScrollView {
                         VStack(alignment: .leading, spacing: 20) {
@@ -56,7 +56,7 @@ struct FeedView: View {
                                     }
                                 }
                             }
-                            .whiteBackground()
+                            .sectionBackground()
                             
                             VStack(alignment: .leading, spacing: 20) {
                                 HStack {
@@ -74,7 +74,7 @@ struct FeedView: View {
                                 
                                 ScrollView(.horizontal) {
                                     LazyHGrid(rows: GridSetups.horizontalGrid, spacing: 15) {
-                                        ForEach(vm.cells, id: \.self) { cell in
+                                        ForEach(vm.popularCells.prefix(6), id: \.self) { cell in
                                             FeedBigCellView(cell: cell) {
                                                 vm.feedRoutes.append(.bigCell(cell))
                                             }
@@ -84,7 +84,7 @@ struct FeedView: View {
                                 }
                                 .horizontalPadding(false)
                             }
-                            .whiteBackground()
+                            .sectionBackground()
                             
                             VStack(alignment: .leading, spacing: 20) {
                                 Components.headerView("Лента")
@@ -97,7 +97,7 @@ struct FeedView: View {
                                     }
                                 }
                             }
-                            .whiteBackground()
+                            .sectionBackground()
                         }
                     }
                 }

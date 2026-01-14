@@ -19,7 +19,7 @@ struct CellFeedView: View {
                         onTapHandler(cell)
                     }
                 }
-                .whiteBackground()
+                .sectionBackground()
             }
         }
     }

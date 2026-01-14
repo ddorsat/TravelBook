@@ -19,7 +19,7 @@ struct AppearanceView: View {
                     } label: {
                         HStack {
                             Text(theme.rawValue)
-                                .foregroundStyle(.primary)
+                                .foregroundStyle(.title)
                                                         
                             Spacer()
                                                         
@@ -37,7 +37,7 @@ struct AppearanceView: View {
                     .foregroundStyle(.gray)
                     .fontWeight(.medium)
             }
-            .listRowBackground(Color(uiColor: .systemGroupedBackground))
+            .listRowBackground(Color(uiColor: .background))
         }
         .navigationTitle("Оформление")
         .navigationBarTitleDisplayMode(.inline)

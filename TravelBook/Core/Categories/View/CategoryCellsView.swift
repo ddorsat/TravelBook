@@ -14,7 +14,7 @@ struct CategoryCellsView: View {
     
     var body: some View {
         ZStack {
-            Components.backgroundColor(onlyBottom: true)
+            Components.backgroundColor()
 
             if vm.searchResults.isEmpty {
                 ContentUnavailableView("Пока нет данных 🙁", image: "")
@@ -27,7 +27,7 @@ struct CategoryCellsView: View {
                                     onTapHandler(cell)
                                 }
                             }
-                            .whiteBackground()
+                            .sectionBackground()
                         }
                     }
                 }

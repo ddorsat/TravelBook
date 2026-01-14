@@ -31,7 +31,7 @@ struct ProfileView: View {
                 } header: {
                     Color.clear.frame(height: 70)
                 }
-                .listRowBackground(Color(uiColor: .systemGroupedBackground))
+                .listRowBackground(Color(uiColor: .background))
                 
                 Section {
                     ProfileCellView(user: .mock, type: .appearance) {
@@ -42,14 +42,14 @@ struct ProfileView: View {
                         vm.profileRoutes.append(.notifications)
                     }
                 }
-                .listRowBackground(Color(uiColor: .systemGroupedBackground))
+                .listRowBackground(Color(uiColor: .background))
                     
                 Section {
                     ProfileCellView(user: .mock, type: .aboutApp) {
                         vm.profileRoutes.append(.aboutApp)
                     }
                 }
-                .listRowBackground(Color(uiColor: .systemGroupedBackground))
+                .listRowBackground(Color(uiColor: .background))
             }
             .listSectionSpacing(100)
             .scrollContentBackground(.hidden)

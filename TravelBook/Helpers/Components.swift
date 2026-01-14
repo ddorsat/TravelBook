@@ -22,9 +22,12 @@ struct Components {
             .padding(.leading, 2)
     }
     
-    static func customDivider() -> some View {
-        Divider()
-            .padding(.leading, 15)
+    static func customDivider(isFavorites: Bool) -> some View {
+        Rectangle()
+            .foregroundStyle(.divider)
+            .frame(height: 0.5)
+            .padding(.leading, isFavorites ? 81 : 15)
+            .padding(.top, isFavorites ? 5 : 0)
             .horizontalPadding(false)
     }
     
@@ -62,8 +65,8 @@ struct Components {
         }
     }
     
-    static func backgroundColor(onlyBottom: Bool) -> some View {
-        return Color(uiColor: .systemGroupedBackground).ignoresSafeArea(edges: onlyBottom ? .bottom : .vertical)
+    static func backgroundColor() -> some View {
+        return Color(uiColor: .background).ignoresSafeArea(edges: .bottom)
     }
 }
 

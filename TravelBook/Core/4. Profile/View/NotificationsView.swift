@@ -18,7 +18,7 @@ struct NotificationsView: View {
                     .foregroundStyle(.gray)
                     .fontWeight(.medium)
             }
-            .listRowBackground(Color(uiColor: .systemGroupedBackground))
+            .listRowBackground(Color(uiColor: .background))
         }
         .navigationTitle("Уведомления")
         .navigationBarTitleDisplayMode(.inline)

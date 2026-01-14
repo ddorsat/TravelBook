@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Kingfisher
 
 struct FavoritesCellView: View {
     @State private var isLiked: Bool = true
@@ -17,14 +18,10 @@ struct FavoritesCellView: View {
         Button(action: onTapHandler) {
             VStack {
                 HStack {
-                    Image(cell.image)
+                    KFImage(URL(string: cell.image))
                         .resizable()
+                        .scaledToFill()
                         .frame(width: 60, height: 60)
-                        .overlay {
-                            RoundedRectangle(cornerRadius: 5)
-                                .stroke(lineWidth: 2)
-                                .foregroundStyle(.white)
-                        }
                         .clipShape(RoundedRectangle(cornerRadius: 5))
                             
                     VStack(alignment: .leading, spacing: 7) {
@@ -51,10 +48,7 @@ struct FavoritesCellView: View {
                     }
                 }
                 
-                Divider()
-                    .padding(.leading, 81)
-                    .padding(.top, 5)
-                    .horizontalPadding(false)
+                Components.customDivider(isFavorites: true)
             }
         }
     }

@@ -43,7 +43,7 @@ struct ProfileCellView: View {
                 if type == .signedIn {
                     VStack(alignment: .leading, spacing: 8) {
                         Text(user.username ?? user.email)
-                            .foregroundStyle(.black)
+                            .foregroundStyle(.title)
                             .fontWeight(.semibold)
                             .font(.system(size: 18))
                         Text("@" + user.id.uuidString.suffix(5))

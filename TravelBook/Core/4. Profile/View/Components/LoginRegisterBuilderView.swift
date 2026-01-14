@@ -55,7 +55,7 @@ struct LoginRegisterBuilderView: View {
                     }
                 }
             }
-            .listRowBackground(Color(uiColor: .systemGroupedBackground))
+            .listRowBackground(Color(uiColor: .background))
         }
         .scrollContentBackground(.hidden)
         .navigationTitle(type.rawValue)

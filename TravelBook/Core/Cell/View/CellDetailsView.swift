@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Kingfisher
 
 struct CellDetailsView: View {
     @StateObject private var vm: CellDetailsViewModel
@@ -19,7 +20,7 @@ struct CellDetailsView: View {
     var body: some View {
         ScrollView {
             VStack(spacing: 20) {
-                Image(cell.image)
+                KFImage(URL(string: cell.image))
                     .resizable()
                     .scaledToFill()
                     .frame(height: UIScreen.main.bounds.height / 3.5)
@@ -36,7 +37,7 @@ struct CellDetailsView: View {
                 
                 TabView {
                     ForEach(cell.images, id: \.self) { image in
-                        Image(image)
+                        KFImage(URL(string: image))
                             .resizable()
                             .scaledToFill()
                             .clipped()

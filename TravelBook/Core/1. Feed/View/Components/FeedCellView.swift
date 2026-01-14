@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Kingfisher
 
 struct FeedCellView: View {
     let cell: CellModel
@@ -14,7 +15,7 @@ struct FeedCellView: View {
     var body: some View {
         Button(action: onTapHandler) {
             VStack(alignment: .leading, spacing: 10) {
-                Image(cell.image)
+                KFImage(URL(string: cell.image))
                     .resizable()
                     .scaledToFill()
                     .frame(width: UIScreen.main.bounds.width / 2.2,
@@ -22,7 +23,7 @@ struct FeedCellView: View {
                     .clipShape(RoundedRectangle(cornerRadius: 12))
                 
                 Text(cell.title)
-                    .foregroundStyle(.black)
+                    .foregroundStyle(.title)
                     .font(.system(size: 14))
                     .fontWeight(.semibold)
                     .padding(.leading, 3)

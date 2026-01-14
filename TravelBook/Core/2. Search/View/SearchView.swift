@@ -25,7 +25,7 @@ struct SearchView: View {
     var body: some View {
         NavigationStack(path: $vm.searchRoutes) {
             ZStack {
-                Components.backgroundColor(onlyBottom: true)
+                Components.backgroundColor()
 
                 ScrollView {
                     VStack(alignment: .leading, spacing: 20) {
@@ -40,9 +40,9 @@ struct SearchView: View {
                                 }
                             }
 
-                            Components.customDivider()
+                            Components.customDivider(isFavorites: false)
 
-                            ForEach(CategoryModel.mockArray.prefix(upTo: 3),
+                            ForEach(vm.categories.prefix(3),
                                     id: \.self) { category in
                                 CategoriesSmallView(category: category) {
                                     vm.searchRoutes.append(.categoryCells(category))
@@ -50,16 +50,16 @@ struct SearchView: View {
                             }
                         }
                         .padding(.top, 3)
-                        .whiteBackground()
+                        .sectionBackground()
                         .padding(.top, 20)
 
                         VStack(alignment: .leading, spacing: 10) {
                             Components.headerView("Посты")
                             
-                            Components.customDivider()
+                            Components.customDivider(isFavorites: false)
                         }
                         .padding(.top, 3)
-                        .whiteBackground()
+                        .sectionBackground()
 
                         VStack(alignment: .leading, spacing: 20) {
                             ForEach(vm.cells, id: \.self) { cell in
@@ -68,7 +68,7 @@ struct SearchView: View {
                                         vm.searchRoutes.append(.searchFeedCellDetails(cell))
                                     }
                                 }
-                                .whiteBackground()
+                                .sectionBackground()
                             }
                         }
                         .padding(.top, -30)

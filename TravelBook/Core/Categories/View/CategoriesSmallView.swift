@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Kingfisher
 
 struct CategoriesSmallView: View {
     let category: CategoryModel
@@ -14,17 +15,16 @@ struct CategoriesSmallView: View {
     var body: some View {
         HStack(alignment: .center) {
             Button(action: onTapHandler) {
-                Image(category.image)
+                KFImage(URL(string: category.image))
+                    .placeholder {
+                        ProgressView()
+                    }
                     .resizable()
                     .frame(width: 37, height: 37)
                     .clipShape(Circle())
-                    .overlay {
-                        Circle()
-                            .stroke(lineWidth: 2)
-                            .foregroundStyle(.white)
-                    }
                 
                 Text(category.theme.title)
+                    .foregroundStyle(.title)
                     .fontWeight(.medium)
             }
             
@@ -32,6 +32,7 @@ struct CategoriesSmallView: View {
             
             Button(action: onTapHandler) {
                 Text("Перейти")
+                    .foregroundStyle(.title)
                     .font(.system(size: 14))
                     .fontWeight(.medium)
                     .padding(.vertical, 6)

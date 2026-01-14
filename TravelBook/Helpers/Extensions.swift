@@ -25,10 +25,16 @@ extension View {
             .padding(.horizontal, negative ? 13 : -13)
     }
     
-    func whiteBackground() -> some View {
+    func sectionBackground() -> some View {
         self
             .horizontalPadding(true)
             .padding(.vertical, 15)
-            .background(.white)
+            .background(.feedCellBackground)
+    }
+}
+
+extension ColorScheme {
+    var isLight: Bool {
+        self == .light
     }
 }

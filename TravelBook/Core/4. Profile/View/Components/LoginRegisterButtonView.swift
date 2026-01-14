@@ -31,7 +31,7 @@ struct LoginRegisterButtonView: View {
             }
             .padding(15)
             .frame(maxWidth: .infinity)
-            .background(type == .apple ? .black : Color(uiColor: .systemGroupedBackground))
+            .background(type == .apple ? .apple : .email)
             .clipShape(RoundedRectangle(cornerRadius: 10))
         }
     }

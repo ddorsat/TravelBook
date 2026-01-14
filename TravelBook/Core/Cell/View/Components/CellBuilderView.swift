@@ -25,20 +25,27 @@ struct CellBuilderView: View {
             Text(cell.title)
                 .font(.title)
                 .fontWeight(.semibold)
+                .foregroundStyle(.title)
             
             Text(cell.subtitle)
-                .foregroundStyle(Color(uiColor: .darkGray))
+                .foregroundStyle(.subtitle)
                 .font(.callout)
                 .fontWeight(.bold)
             
             HStack(spacing: isCellDetails ? 15 : 10) {
                 Text("\(cell.dateString)")
-                Divider()
+                
+                Rectangle()
+                    .foregroundStyle(.cellDivider)
+                    .frame(width: 1, height: 17)
                 
                 Text("\(cell.readingTime) мин")
-                Divider()
                 
                 if isCellDetails {
+                    Rectangle()
+                        .foregroundStyle(.cellDivider)
+                        .frame(width: 1, height: 17)
+                    
                     Button {
                         withAnimation {
                             isFavorite?.toggle()
@@ -52,12 +59,12 @@ struct CellBuilderView: View {
                     }
                 }
             }
-            .foregroundStyle(Color.gray)
+            .foregroundStyle(.subtitle)
             .font(.subheadline)
             .fontWeight(.medium)
             
             Text(cell.description)
-                .foregroundStyle(Color(uiColor: .darkGray))
+                .foregroundStyle(.subtitle)
                 .fontWeight(.medium)
                 .lineSpacing(6)
                 .padding(.vertical, isSearch ? 15 : 17)

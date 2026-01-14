@@ -6,6 +6,10 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		36F61F362F17029C00AC81E9 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = 36F61F352F17029C00AC81E9 /* Kingfisher */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXFileReference section */
 		3609B6792F06CF3D00C9A8FD /* TravelBook.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TravelBook.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -23,6 +27,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				36F61F362F17029C00AC81E9 /* Kingfisher in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -65,6 +70,7 @@
 			);
 			name = TravelBook;
 			packageProductDependencies = (
+				36F61F352F17029C00AC81E9 /* Kingfisher */,
 			);
 			productName = TravelBook;
 			productReference = 3609B6792F06CF3D00C9A8FD /* TravelBook.app */;
@@ -95,6 +101,7 @@
 			mainGroup = 3609B6702F06CF3D00C9A8FD;
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
+				36F61F342F17029C00AC81E9 /* XCRemoteSwiftPackageReference "Kingfisher" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 3609B67A2F06CF3D00C9A8FD /* Products */;
@@ -346,6 +353,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		36F61F342F17029C00AC81E9 /* XCRemoteSwiftPackageReference "Kingfisher" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/onevcat/Kingfisher";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 8.6.2;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		36F61F352F17029C00AC81E9 /* Kingfisher */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 36F61F342F17029C00AC81E9 /* XCRemoteSwiftPackageReference "Kingfisher" */;
+			productName = Kingfisher;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 3609B6712F06CF3D00C9A8FD /* Project object */;
 }
